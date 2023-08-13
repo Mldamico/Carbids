@@ -37,7 +37,7 @@ export default function Listings() {
     getData(url).then((data) => {
       setData(data);
     });
-  }, [url]);
+  }, [url, setData]);
 
   if (!data) return <h3>Loading...</h3>;
 
