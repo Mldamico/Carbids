@@ -36,7 +36,7 @@ public class Index : PageModel
  
     public async Task<IActionResult> OnPost()
     {
-        if (Input.Button != "Register") return Redirect("~/");
+        if (Input.Button != "register") return Redirect("~/");
         if (ModelState.IsValid)
         {
             var user = new ApplicationUser
