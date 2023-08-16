@@ -36,7 +36,7 @@ public class Index : PageModel
  
     public async Task<IActionResult> OnPost()
     {
-        if (Input.Button != "register") return Redirect("~/");
+        if (Input.Button != "Register") return Redirect("~/");
         if (ModelState.IsValid)
         {
             var user = new ApplicationUser
@@ -47,9 +47,10 @@ public class Index : PageModel
             };
 
             var result = await _userManager.CreateAsync(user, Input.Password);
-
+            
             if (result.Succeeded)
             {
+                
                 await _userManager.AddClaimsAsync(user, new Claim[]
                 {
                     new Claim(JwtClaimTypes.Name, Input.FullName)
