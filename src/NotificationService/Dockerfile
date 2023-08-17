@@ -14,11 +14,12 @@ COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityServ
 
 RUN dotnet restore CarBids.sln
 
-COPY src/IdentityService/ src/IdentityService/
-WORKDIR /app/src/IdentityService
+COPY src/NotificationService/ src/NotificationService/
+COPY src/Contracts src/Contracts
+WORKDIR /app/src/NotificationService
 RUN dotnet publish -c Release -o /app/src/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 COPY --from=build /app/src/out .
-ENTRYPOINT ["dotnet", "IdentityService.dll"]
+ENTRYPOINT ["dotnet", "NotificationService.dll"]
