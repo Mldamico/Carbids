@@ -33,7 +33,7 @@ export default function AuctionForm({ auction }: Props) {
       reset({ make, model, colour, kilometer, year });
     }
     setFocus("make");
-  }, [setFocus]);
+  }, [setFocus, auction, reset]);
 
   const onSubmit = async (data: FieldValues) => {
     try {
