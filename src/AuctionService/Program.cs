@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     options.TokenValidationParameters.NameClaimType = "username";
 });
 builder.Services.AddGrpc();
-
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 
 var app = builder.Build();
 
@@ -70,4 +70,6 @@ catch (Exception e)
 
 app.Run();
 
-
+public partial class Program
+{
+}
