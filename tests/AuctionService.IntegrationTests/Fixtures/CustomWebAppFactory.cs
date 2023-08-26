@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
+using WebMotions.Fake.Authentication.JwtBearer;
 
 namespace AuctionService.IntegrationTests.Fixtures;
 
 public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder().Build();
+    private readonly PostgreSqlContainer _postgreSqlContainer = new PostgreSqlBuilder().Build();
 
     public async Task InitializeAsync()
     {
@@ -24,6 +25,7 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
         builder.ConfigureTestServices(services =>
         {
             services.RemoveDbContext<AuctionDbContext>();
+
             services.AddDbContext<AuctionDbContext>(options =>
             {
                 options.UseNpgsql(_postgreSqlContainer.GetConnectionString());
@@ -32,8 +34,11 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
             services.AddMassTransitTestHarness();
 
             services.EnsureCreated<AuctionDbContext>();
+
+            services.AddAuthentication(FakeJwtBearerDefaults.AuthenticationScheme)
+                .AddFakeJwtBearer(opt => { opt.BearerValueType = FakeJwtBearerBearerValueType.Jwt; });
         });
     }
 
-    public Task DisposeAsync() => _postgreSqlContainer.DisposeAsync().AsTask();
+    Task IAsyncLifetime.DisposeAsync() => _postgreSqlContainer.DisposeAsync().AsTask();
 }
